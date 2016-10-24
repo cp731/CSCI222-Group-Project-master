@@ -1,0 +1,23 @@
+{
+  "name": "BugReport-Importer",
+  "version": "1.0.0",
+  "description": "Imports data from BugReport.xml",
+  "main": "index.js",
+  "repository": {
+    "url": "git@github.com:Chao-Man/CSCI222-Group-Project.git",
+    "type": "git"
+  },
+  "author": "Chaomander",
+  "license": "MIT",
+  "dependencies": {
+    "mysql": "^2.11.1",
+    "xml2js": "^0.4.17"
+  },
+  "devDependencies": {
+    "eslint": "^3.8.1",
+    "eslint-config-google": "^0.7.0",
+    "eslint-config-standard": "^6.2.0",
+    "eslint-plugin-promise": "^3.3.0",
+    "eslint-plugin-standard": "^2.0.1"
+  }
+}

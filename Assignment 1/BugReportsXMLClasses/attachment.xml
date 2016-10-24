@@ -1,0 +1,21 @@
+<attachment
+  isobsolete="0"
+  ispatch="1"
+  isprivate="0"
+  >
+  <attachid>815815</attachid>
+  <date>2013-10-11 05:24:10 -0700</date>
+  <delta_ts>2013-10-11 05:25:32 -0700</delta_ts>
+  <desc>patch</desc>
+  <filename>conditionalForwardWithUrlbarWidth.diff</filename>
+  <type>text/plain</type>
+  <size>710</size>
+  <attacher>dao</attacher>
+
+  <flag name="review"
+      id="730121"
+      type_id="748"
+      status="+"
+      setter="gijskruitbosch+bugs"
+      />
+ </attachment>

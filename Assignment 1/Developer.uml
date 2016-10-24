@@ -1,0 +1,29 @@
+@startuml
+
+left to right direction
+
+Title Administrator\nUse Case
+
+:Developer: as Dev
+
+rectangle BugTracker{
+	Dev -> (Login)
+		(Login) ..> (Register\n an account): <<Extends>>
+		(Login) ..> (Incorrect\npassword): <<Extends>>
+
+	Dev -> (View list\nof users)	
+		(View list\nof users) ..> (View user\naccount): <<Extends>>
+			(View user\naccount) ..> (User Statistics): <<Extends>>
+		
+	Dev -> (Report\na bug)
+		(Report\na bug) ...> (Attache File\nto bug report): <<Includes>>
+
+	Dev -> (Search and\n view bugs)
+		
+		(Search and\n view bugs) ..> (Comment \non bugs): <<Extends>>
+
+	Dev --> (Flag bug\nfor review)
+
+}
+
+@enduml

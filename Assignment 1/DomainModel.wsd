@@ -1,0 +1,248 @@
+'Dependency from A to B means that A uses B but indirectly (say by receiving instances of it and forwarding them to other objects).
+'Association from A to B means that A uses B directly, (for example by calling methods)
+'Aggregation from A to B means that B is part of A (semantically) but B can be shared and if A is deleted, B is not deleted. Note that this says nothing about how the "is part" is implemented.
+'Composition from A to B is like Aggregation, where B cannot be shared and if A is deleted, all of its aggregates (Bs) are deleted also.
+
+@startuml
+
+'skinparam nodesep 30
+'skinparam ranksep 30
+'skinparam padding 5
+
+'Group "1" o-- "*" User : is assigned to
+
+Bug "*" o- "1" User : reports
+Bug "*" o- "1" Developer : is assigned to
+
+Bug "*" o-- "*" Keyword : related to
+Bug "*" o-- "1" Platform : compiled for
+Bug "*" o-- "1" OperatingSystem : developed for
+Bug "*" o-- "1" Component : is a
+Bug "*" o-- "1" ProductMilestone : target
+Bug "*" o-left- "1" ProductVersion : affects
+Bug "*" o-- "1" Product : affects
+
+Bug "*" o-up- "1" BugStatus : in
+Bug "*" o-up- "1" Resolution : fixed using
+Bug "*" o-up- "1" Priority : has a
+Bug "*" o-up- "1" BugSeverity : set to
+
+Bug "1" o-- "*" Attachment
+Bug "1" *-- "*" Comment
+Comment "1" *-- "*" Attachment
+
+Bug "*" <-- "1" Report : uses
+User "*" <-- "1" Report : includes
+
+User "1" o-- "*" Comment
+
+Product "1" *-- "*" ProductMilestone
+Product "1" *-- "*" ProductVersion
+Product "*" *-- "*" Component
+
+User <|-up- Reporter
+User <|-up- Developer
+User <|-up- Reviewer
+User <|-up- Triager
+User <|-up- Admin
+
+Admin --> User
+Triager --> Developer
+
+Search -down-> User
+Search -down-> Bug
+Search -down-> Keyword
+Search -down-> Product
+
+class Search {
+    + [User] searchUsers(username, firstname, lastname)
+    + [Bug] searchBugsUsingDescription(description)
+    + [Bug] searchBugsUsingKeywords([Keyword])
+    + [Product] searchProducts(productName)
+}
+
+class User {
+    - username : string
+    - firstname : string
+    - lastname : string
+    - passwordHash : string
+    - email : string
+    - reputation : int
+    - active : bool
+
+    - canReportBug : bool
+    - canEditBugSpecification : bool
+    - canReadBug : bool
+    - canChangeBugStatus : bool
+    - flagBugForReview : bool
+    - canComment : bool
+    - canEditResolution : bool
+    - canAttachFile : bool
+    - canAssign : bool
+    - approveAccountCreation : bool
+
+    + bool newUser(username, firstname, lastname, email, password)
+    + int calculateReputation()
+    # string hashPassword(password)
+    # void reportNewBug(shortDescription, reporterAccessible,
+        cclistAccessible, product, component, targetMilestone,
+        version, platform, opSys, attachment)
+    # void newComment(bug, content, attachment)
+    + bool login(username, password)
+}
+
+Class Reporter {
+
+}
+
+Class Developer {
+    # void setBugResolution(bug, resolution)
+}
+
+Class Reviewer {
+    # void setBugStatus(bug, status)
+}
+
+Class Triager {
+    # void assignBug(bug, developer)
+    # void setPriority(bug, priority)
+    # void setSeverity(bug, severity)
+    # void setBugStatus(bug, status)
+}
+
+Class Admin {
+    # void setAccountActive(booleanValue)
+    # void setAccountPermissions(user, canReportBug,
+        canEditResolution, canReadBug, canChangeBugStatus,
+        flagBugForReview, canComment, canEditResolution, canAttachFile,
+        canAssign, approveAccountCreation)
+}
+
+
+class Bug {
+    - id : int
+    - creationTimestamp : tm
+    - shortDescription : string
+    - deltaTimestamp : tm
+    - reporterAccessible : bool
+    - cclistAccessible : bool
+    - product : Product
+    - component : Component
+    - version : ProductVersion
+    - platform : Platform
+    - opSys : OperatingSystem
+    - bugStatus : BugStatus
+    - resolution : Resolution
+    - keywords : [Keyword]
+    - priority : Priority
+    - bugSeverity : BugSeverity
+    - targetMilestone : ProductMilestone
+    - everConfirmed : bool
+    - reporter : User
+    - assignedTo : User
+    - votes : int
+
+    + void newBugReport(shortDescription, reporterAccessible,
+        cclistAccessible, product, component,
+         targetMilestone, version, platform, opSys, attachment)
+    + bool upVote(username)
+    + bool downVote(username)
+    + void assignDeveloper(user)
+    + void setReporter(user)
+}
+
+class Report {
+    + void generateUserReport(startDate, endDate, user)
+    + void generateProductReport(startDate, endDate, product)
+}
+
+class Attachment {
+    + fileName : string
+    + filePath : string
+    + data : Data
+}
+
+class Comment {
+    + user : User
+    + content : string
+    + attachment: Attachment
+}
+
+class Keyword {
+    'E.g. regression
+    + title : string
+    + description : string
+}
+
+class Platform {
+    'E.g. x86_64
+    + title : string
+    + description : string
+}
+
+class OperatingSystem {
+    'E.g. Windows 7/8/10
+    + title : string
+    + description : string
+}
+
+class Component {
+    'E.g. Theme
+    + title : string
+    + description : string
+}
+
+enum Priority {
+    NEEDSTRIAGE
+    UNBREAKNOW
+    HIGH
+    NORMAL
+    LOW
+    LOWEST
+}
+
+enum BugSeverity {
+    BLOCKER
+    CRITICAL
+    MAJOR
+    NORMAL
+    MINOR
+    TRIVIAL
+    ENHANCEMENT
+}
+
+enum BugStatus {
+    UNCONFIRMED
+    NEW
+    ASSIGNED
+    REOPENED
+    RESOLVED
+    VERIFIED
+}
+
+enum Resolution {
+    FIXED
+    INVALID
+    WONTFIX
+    DUPLICATE
+    WORKSFORME
+    INCOMPLETE
+}
+
+class Product {
+    # title : string
+    # Components : [Component]
+    # ProductMilestones : [ProductMilestone]
+    + void addNewVersion(version)
+}
+
+class ProductVersion {
+    # versionNum : int
+}
+
+class ProductMilestone {
+    # title : string
+    # productionVersion : ProductVersion
+}
+
+@enduml

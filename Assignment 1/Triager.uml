@@ -1,0 +1,34 @@
+@startuml
+
+left to right direction
+
+Title Administrator\nUse Case
+
+:Triager: as Tri
+
+rectangle BugTracker{
+	Tri -> (Login)
+		(Login) ..> (Register\n an account): <<Extends>>
+		(Login) ..> (Incorrect\npassword): <<Extends>>
+
+	Tri -> (View list\nof users)	
+		(View list\nof users) ..> (View user\naccount): <<Extends>>
+			(View user\naccount) ..> (User Statistics): <<Extends>>
+		
+	Tri --> (Assign developer\nto bug)
+
+	Tri -> (Report\na bug)
+		(Report\na bug) ...> (Attache File\nto bug report): <<Includes>>
+
+	Tri -> (Search and\n view bugs)
+		
+		(Search and\n view bugs) ..> (Comment \non bugs): <<Extends>>
+		
+	Tri --> (Change \nbug status)
+
+	Tri --> (Edit bug\nreport)
+		(Edit bug\nreport) ...> (Attache File\nto bug report): <<Includes>>
+
+}
+
+@enduml

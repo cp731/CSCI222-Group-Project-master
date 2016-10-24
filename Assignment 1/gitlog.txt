@@ -1,0 +1,34 @@
+commit 5c5e7793d44b4f6e4f88315a5b81a1407ba62390
+Merge: eca3f8e a67e606
+Author: Jian Chao Man <cman@Eburnean.local>
+Date:   Wed Sep 7 11:06:34 2016 +1000
+
+    Merge branch 'master' of github.com:Chao-Man/CSCI222-Group-Project
+
+commit eca3f8eac0063d630ab36f2c2dc001a7b0c9ee93
+Author: Jian Chao Man <cman@Eburnean.local>
+Date:   Wed Sep 7 10:56:59 2016 +1000
+
+    Changes to DomainModel
+
+commit a67e606babc1568442d6008ad5c01c130d336599
+Author: Kieran MacRae <macrae.kieran@gmail.com>
+Date:   Tue Sep 6 01:28:32 2016 +1000
+
+    Add files via upload
+    
+    Cloning the Google Drive to centralise files on Github.
+
+commit fcacef122fdc2fb36cb5178eee24cbaf4ab8d4ba
+Author: Jian Chao Man <cman@Eburnean.local>
+Date:   Wed Aug 17 16:52:47 2016 +1000
+
+    - Added deconstructed BugReports.xml classes.
+    - Added bug and commenttable creation SQL scripts.
+    ---------------------------------------
+
+commit 21f98c38c38cc39191fbda673a2c644d39f3448d
+Author: Chao Man <me@chaomander.com>
+Date:   Tue Aug 16 11:03:57 2016 +1000
+
+    Initial commit

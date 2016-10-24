@@ -1,0 +1,32 @@
+@startuml
+
+left to right direction
+
+Title Administrator\nUse Case
+
+:Reviewer: as Rev
+
+rectangle BugTracker{
+	Rev -> (Login)
+		(Login) ..> (Register\n an account): <<Extends>>
+		(Login) ..> (Incorrect\npassword): <<Extends>>
+
+	Rev -> (View list\nof users)	
+		(View list\nof users) ..> (View user\naccount): <<Extends>>
+			(View user\naccount) ..> (User Statistics): <<Extends>>
+
+	Rev -> (Report\na bug)
+		(Report\na bug) ...> (Attache File\nto bug report): <<Includes>>
+
+	Rev -> (Search and\n view bugs)
+		
+		(Search and\n view bugs) ..> (Comment \non bugs): <<Extends>>
+		
+		
+	Rev --> (Edit bug\nresolution)
+
+	Rev --> (Change \nbug status)
+
+}
+
+@enduml
