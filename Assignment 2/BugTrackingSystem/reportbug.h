@@ -26,6 +26,8 @@ private slots:
 
     void on_submitButton_clicked();
 
+    //void on_pushButton_clicked();
+
 private:
     Ui::Reportbug *ui;
     QString currentUser;

@@ -1,7 +1,7 @@
 #include "buglist.h"
 #include "ui_buglist.h"
 
-BugList::BugList(QWidget *parent, QString searchValue) :
+BugList::BugList(QWidget *parent, QString searchValue, int currentUserType) :
     QMainWindow(parent),
     ui(new Ui::BugList)
 {
@@ -13,8 +13,8 @@ BugList::BugList(QWidget *parent, QString searchValue) :
 // Read the bugs from the database
     qDebug() << "Contructing with: " << searchValue;
     QSqlQuery bugResult = bugQuery(searchValue);
-    setList(bugResult);
-    currentType = -1;
+    //setList(bugResult);
+    currentType = currentUserType;
 }
 
 BugList::~BugList()
@@ -57,6 +57,35 @@ QSqlQuery BugList::bugQuery(QString searchTerm){
         }
     }
 
+    QGridLayout* layout = new QGridLayout();
+    QSignalMapper* signalMapper = new QSignalMapper(this);
+    QString bug_list;
+    int results = 0;
+    if(query.first()){
+        do{
+            int bugIdNum = query.value(0).toInt();
+            bug_list = query.value(0).toString() + " | " + query.value(1).toString() + " | " + query.value(2).toString() + "\n";
+            QHBoxLayout* bugEntry = new QHBoxLayout();
+            QLabel* label = new QLabel();
+            QPushButton* moreButton = new QPushButton(this);
+            moreButton->setText("More");
+            moreButton->setMaximumWidth(100);
+            signalMapper->setMapping(moreButton, bugIdNum);
+            connect(moreButton, SIGNAL(clicked()), signalMapper, SLOT(map()));
+            label->setText(bug_list);
+            bugEntry->addWidget(label);
+            bugEntry->addWidget(moreButton);
+            layout->addLayout(bugEntry, results, 0);
+            layout->setAlignment(Qt::AlignTop);
+            results++;
+        }while(query.next());
+    }
+    QWidget* viewport = new QWidget();
+    viewport->setLayout(layout);
+    ui->bugList->setWidget(viewport);
+    ui->bugList->setWidgetResizable(true);
+    connect(signalMapper, SIGNAL(mapped(int)), this, SLOT(on_bugButton_clicked(int)));
+
     connection.connClose();
 
     return query;
@@ -76,16 +105,20 @@ void BugList::on_searchButton_clicked()
 void BugList::setList(QSqlQuery bugs){
 
     QGridLayout* layout = new QGridLayout();
+    QSignalMapper* signalMapper = new QSignalMapper(this);
     QString bug_list;
     int results = 0;
     if(bugs.first()){
         do{
+            int bugIdNum = bugs.value(0).toInt();
             bug_list = bugs.value(0).toString() + " | " + bugs.value(1).toString() + " | " + bugs.value(2).toString() + "\n";
             QHBoxLayout* bugEntry = new QHBoxLayout();
             QLabel* label = new QLabel();
-            QPushButton* moreButton = new QPushButton();
+            QPushButton* moreButton = new QPushButton(this);
             moreButton->setText("More");
             moreButton->setMaximumWidth(100);
+            signalMapper->setMapping(moreButton, bugIdNum);
+            connect(moreButton, SIGNAL(clicked()), signalMapper, SLOT(map()));
             label->setText(bug_list);
             bugEntry->addWidget(label);
             bugEntry->addWidget(moreButton);
@@ -94,18 +127,25 @@ void BugList::setList(QSqlQuery bugs){
             results++;
         }while(bugs.next());
     }
-    ui->bugList->setLayout(layout);
+    QWidget* viewport = new QWidget();
+    viewport->setLayout(layout);
+    ui->bugList->setWidget(viewport);
     ui->bugList->setWidgetResizable(true);
+    connect(signalMapper, SIGNAL(mapped(int)), this, SLOT(on_bugButton_clicked(int)));
 }
 
+// Sets the current user of a page
 void BugList::setCurrentUser(QString uname, int t){
     currentUser = uname;
     currentType = t;
-    ui->currentUserLabel->setStyleSheet("QPushButton {color: blue}");
-    ui->currentUserLabel->setText("You are logged in as: " + currentUser);
-    ui->loginButton->setText(QString("Logout"));
+    if(currentType != -1){
+        ui->currentUserLabel->setStyleSheet("QPushButton {color: blue}");
+        ui->currentUserLabel->setText("You are logged in as: " + currentUser);
+        ui->loginButton->setText(QString("Logout"));
+    }
 }
 
+// Slot for pressing the login/logout button.
 void BugList::on_loginButton_clicked()
 {
     if(currentType == -1){
@@ -119,22 +159,23 @@ void BugList::on_loginButton_clicked()
     }
 }
 
+// Slot for clicking on the username, goes to profile page.
 void BugList::on_currentUserLabel_clicked()
 {
     // Ensure that someone is logged in
-    if(currentType == 1){
+    if (currentType == 1) {
         ProfilePage* profilePage = new ProfilePage();
         profilePage->setCurrentUser(currentUser, currentType);
         profilePage->show();
         this->hide();
     }
-    else if(currentType == 0){
+    else if (currentType == 0) {
         AdminProfile* adminPage = new AdminProfile();
         adminPage->setCurrentUser(currentUser, currentType);
         adminPage->show();
         this->hide();
     }
-    else if(currentType == 2){
+    else if (currentType == 2) {
         DeveloperPage* developerPage = new DeveloperPage();
         developerPage->setCurrentUser(currentUser, currentType);
         developerPage->show();
@@ -142,6 +183,7 @@ void BugList::on_currentUserLabel_clicked()
     }
 }
 
+// Slot for launching the submit bug activity.
 void BugList::on_newBugButton_clicked()
 {
     if(currentType == -1){
@@ -156,3 +198,17 @@ void BugList::on_newBugButton_clicked()
 
     }
 }
+
+// Slot for launching the bug view activity
+void BugList::on_bugButton_clicked(int bugIdSpec){
+    BugDisplay* bugDisplay = new BugDisplay(0, bugIdSpec, currentType);
+    bugDisplay->setCurrentUser(currentUser, currentType);
+    bugDisplay->show();
+    this->hide();
+}
+/*
+// Slot for launching the report genration activity
+void BugList::on_reportsButton_clicked()
+{
+
+}*/

@@ -3,20 +3,11 @@
 #include "login.h"
 #include "connect.h"
 
-#include <QMessageBox>
-
 addUser::addUser(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::addUser)
 {
     ui->setupUi(this);
-
-
-
-    //mydb=QSqlDatabase::addDatabase("QSQLITE");
-    //mydb.setDatabaseName("/Users/clarephelps/BugTrackingSystem/sqlite-amalgamation-3150000/test.db");
-
-
 }
 
 addUser::~addUser()

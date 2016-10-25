@@ -5,8 +5,8 @@
 #include <QApplication>
 #include <QtSql>
 #include <QDebug>
-#include <QFileInfo>
-#include <string>
+//#include <QFileInfo>
+//#include <QString>
 
 #include "profilepage.h"
 #include "adminprofile.h"
@@ -35,9 +35,6 @@ private slots:
 
 private:
     Ui::Login *ui;
-
-    ProfilePage *newProfilePage;
-    AdminProfile *newAdminProfile;
 };
 
 #endif // LOGIN_H

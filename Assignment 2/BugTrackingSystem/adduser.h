@@ -13,7 +13,6 @@ class addUser : public QDialog
     Q_OBJECT
 
 public:
-    //QSqlDatabase mydb;
     explicit addUser(QWidget *parent = 0);
     ~addUser();
 

@@ -14,14 +14,13 @@ class DeveloperPage : public QMainWindow
 public:
     explicit DeveloperPage(QWidget *parent = 0);
     ~DeveloperPage();
-    void setCurrentUser(QString uname, int t);
+    void setCurrentUser(QString uname, int t);//
     QString bugid;
 
 private slots:
-    void on_tableView_activated(const QModelIndex &index);
-
+    void on_tableView_activated(const QModelIndex &index);//
     
-    void on_pushButton_submit_clicked();
+    void on_pushButton_submit_clicked();//
 
 private:
     Ui::DeveloperPage *ui;

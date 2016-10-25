@@ -25,6 +25,7 @@ private slots:
 
     void on_pushButton_able_clicked();
 
+
 private:
     Ui::AdminProfile *ui;
     addUser *newAdduser;

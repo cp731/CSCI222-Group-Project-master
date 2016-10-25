@@ -19,7 +19,7 @@
      <rect>
       <x>10</x>
       <y>0</y>
-      <width>381</width>
+      <width>451</width>
       <height>80</height>
      </rect>
     </property>
@@ -28,6 +28,19 @@
       <widget class="QPushButton" name="newBugButton">
        <property name="text">
         <string>Report New Bug</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="reportsButton">
+       <property name="maximumSize">
+        <size>
+         <width>100</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>View Reports</string>
        </property>
       </widget>
      </item>
