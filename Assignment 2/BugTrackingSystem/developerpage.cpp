@@ -1,10 +1,10 @@
-#include "profilepage.h"
-#include "ui_profilepage.h"
+#include "developerpage.h"
+#include "ui_developerpage.h"
 #include "connect.h"
 
-ProfilePage::ProfilePage(QWidget *parent) :
+DeveloperPage::DeveloperPage(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::ProfilePage)
+    ui(new Ui::DeveloperPage)
 {
     ui->setupUi(this);
 
@@ -13,55 +13,28 @@ ProfilePage::ProfilePage(QWidget *parent) :
 
     conn.connOpen();
     QSqlQuery * qry = new QSqlQuery(conn.mydb);
-    qry->prepare("select bug_id, creation_ts, short_desc, delta_ts, classification, product, component, version, bug_status, resolution from bug where need_triager=1");
-    //qry->prepare("select * from bug");
+    qry->prepare("select * from bug left outer join bug_users on bug.bug_id=bug_users.bug_id where bug.need_triager=0 and bug.need_developer=1 and bug_users.developer = '"+currentUser+"'");
+
     qry->exec();
     modal->setQuery(*qry);
     ui->tableView->setModel(modal);
 
     qDebug ()<<(modal->rowCount());
-
-    QSqlQueryModel * modal2 = new QSqlQueryModel();
-    QSqlQuery qry2;
-            //= new QSqlQuery(conn.mydb);
-    qry2.prepare("select username from user where type=2");
-
-    qry2.exec();
-    modal2->setQuery(qry2);
-    ui->comboBox->setModel(modal2);
-
-    qDebug ()<<(modal2->rowCount());
-
-
-
-    ui->comboBox_priority->addItem("P1");
-    ui->comboBox_priority->addItem("P2");
-    ui->comboBox_priority->addItem("P3");
-    ui->comboBox_priority->addItem("P4");
-    ui->comboBox_priority->addItem("P5");
-
+    qDebug()<<qry->lastError();
 }
 
-ProfilePage::~ProfilePage()
+DeveloperPage::~DeveloperPage()
 {
     delete ui;
 }
 
-
-void ProfilePage::setCurrentUser(QString uname, int t){
+void DeveloperPage::setCurrentUser(QString uname, int t){
     currentUser = uname;
     currentType = t;
 }
 
-void ProfilePage::on_pushButton_3_clicked()
-{
 
-
-
-}
-
-
-void ProfilePage::on_tableView_activated(const QModelIndex &index)
+void DeveloperPage::on_tableView_activated(const QModelIndex &index)
 {
     QString val=ui->tableView->model()->data(index).toString();
     ui->label->setText(val);
@@ -87,14 +60,14 @@ void ProfilePage::on_tableView_activated(const QModelIndex &index)
 
 }
 
-void ProfilePage::on_pushButton_submit_clicked()
+void DeveloperPage::on_pushButton_submit_clicked()
 {
     QString comment = ui->textEdit_comment->toPlainText();
 
 
     QSqlQuery qry, qry2;
-    qry.prepare("insert into bug_users (bug_id, triager, triager_comment, developer) values('"+bugid+"', '"+currentUser+"', '"+comment+"', '"+ui->comboBox->currentText()+"')");
-    qry2.prepare("update bug set need_triager=0, priority = '"+ui->comboBox_priority->currentText()+"'  where bug_id='"+bugid+"'");
+    qry.prepare("update bug_users set developer_comment= '"+comment+"' where bug_id='"+bugid+"'");
+    qry2.prepare("update bug set need_developer=0 where bug_id='"+bugid+"'");
     if(qry.exec()){
         qDebug()<<("Success");
     }else{
@@ -114,17 +87,4 @@ void ProfilePage::on_pushButton_submit_clicked()
     ui->label_product->setText(" ");
     ui->label_component->setText(" ");
     ui->label_version->setText(" ");
-
-}
-
-void ProfilePage::on_pushButton_duplicate_clicked()
-{
-    QSqlQuery qry;
-    qry.prepare("update bug set need_triager=0, set need_developer=0, set bug_status='DUPLICATE' where bug_id='"+bugid+"'");
-    if(qry.exec()){
-        qDebug()<<("Success");
-    }else{
-        qDebug()<<("Failed to execute");
-    }
-
 }

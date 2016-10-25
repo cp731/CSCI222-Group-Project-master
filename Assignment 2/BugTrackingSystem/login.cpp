@@ -28,7 +28,7 @@ void Login::on_pushButton_clicked()
     QString username, password;
     username =ui->lineEdit_username->text();
     password=ui->lineEdit_password->text();
-    setCurrentUser(username, 0);
+
     Connect conn;
     if(!conn.connOpen()){
         ui->label->setText("Not connected");
@@ -44,13 +44,13 @@ void Login::on_pushButton_clicked()
         int count=0;
         while(qry.next()){
             count++;
-            currentType= 0;
-                    //qry.value(5).toInt();
+            currentType= qry.value(5).toInt();
             ui->label->setText("working");
 
         }
         if(count ==1){
             ui->label->setText("username and password is correct");
+            setCurrentUser(username, currentType);
             conn.connClose();
             this->hide();//hide login page
 

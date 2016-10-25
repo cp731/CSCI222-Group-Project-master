@@ -18,7 +18,7 @@ public:
     ~addUser();
 
 private slots:
-    void on_pushButton_clicked();
+    void on_pushButton_adduser_clicked();
 
 
 private:

@@ -24,7 +24,7 @@ addUser::~addUser()
     delete ui;
 }
 
-void addUser::on_pushButton_clicked()
+void addUser::on_pushButton_adduser_clicked()
 {
     QString username, fname, lname, password, type;
     username =ui->text_username->text();

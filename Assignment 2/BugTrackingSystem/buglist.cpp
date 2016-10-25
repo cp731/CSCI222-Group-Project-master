@@ -122,10 +122,22 @@ void BugList::on_loginButton_clicked()
 void BugList::on_currentUserLabel_clicked()
 {
     // Ensure that someone is logged in
-    if(currentType != -1){
+    if(currentType == 1){
         ProfilePage* profilePage = new ProfilePage();
         profilePage->setCurrentUser(currentUser, currentType);
         profilePage->show();
+        this->hide();
+    }
+    else if(currentType == 0){
+        AdminProfile* adminPage = new AdminProfile();
+        adminPage->setCurrentUser(currentUser, currentType);
+        adminPage->show();
+        this->hide();
+    }
+    else if(currentType == 2){
+        DeveloperPage* developerPage = new DeveloperPage();
+        developerPage->setCurrentUser(currentUser, currentType);
+        developerPage->show();
         this->hide();
     }
 }

@@ -21,7 +21,8 @@ SOURCES += main.cpp\
     firstwindow.cpp \
     enable_disable.cpp \
     buglist.cpp \
-    reportbug.cpp
+    reportbug.cpp \
+    developerpage.cpp
 
 HEADERS  += login.h \
     sqlite3.h \
@@ -33,7 +34,8 @@ HEADERS  += login.h \
     currentuser.h \
     enable_disable.h \
     buglist.h \
-    reportbug.h
+    reportbug.h \
+    developerpage.h
 
 FORMS    += login.ui \
     profilepage.ui \
@@ -42,4 +44,5 @@ FORMS    += login.ui \
     firstwindow.ui \
     enable_disable.ui \
     buglist.ui \
-    reportbug.ui
+    reportbug.ui \
+    developerpage.ui

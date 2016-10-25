@@ -9,6 +9,7 @@
 #include "login.h"
 #include "connect.h"
 #include "reportbug.h"
+#include "developerpage.h"
 
 namespace Ui {
 class BugList;
